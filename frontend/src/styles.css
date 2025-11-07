@@ -1,0 +1,218 @@
+/* ======================= */
+/* Global Styles & Fonts */
+/* ======================= */
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+  color: #333;
+}
+
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* ======================= */
+/* Navbar */
+/* ======================= */
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 12px 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  margin-bottom: 24px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+}
+
+nav a:hover {
+  background: #ffdd59;
+  color: #222;
+  transform: scale(1.05);
+}
+
+/* ======================= */
+/* Game Container */
+/* ======================= */
+
+.game {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  margin-bottom: 24px;
+  transition: transform 0.2s;
+}
+
+.game:hover {
+  transform: translateY(-4px);
+}
+
+.game h2 {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+/* ======================= */
+/* Home Page Game Cards */
+/* ======================= */
+
+.game a {
+  display: block;
+  border-radius: 16px;
+  text-align: center;
+  width: 180px;
+  color: #222;
+  font-weight: 600;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  text-decoration: none;
+  transition: all 0.2s;
+  background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+}
+
+.game a:hover {
+  transform: scale(1.05);
+}
+
+/* Card Images */
+.game a img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  transition: transform 0.3s ease;
+}
+
+.game a:hover img {
+  transform: scale(1.05);
+}
+
+/* Card Text */
+.game a h3 {
+  margin: 8px 0 4px 0;
+}
+
+.game a p {
+  font-size: 14px;
+  margin: 0 0 12px 0;
+}
+
+/* Cards Container */
+.game div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+/* ======================= */
+/* Board & Game Elements */
+/* ======================= */
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  gap: 12px;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.square {
+  width: 100px;
+  height: 100px;
+  background: #f0f4f8;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 36px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.square:hover {
+  background: #ffdd59;
+  transform: scale(1.1);
+}
+
+/* ======================= */
+/* Buttons & Controls */
+/* ======================= */
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+button.small {
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+button.small:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+/* ======================= */
+/* Dino Canvas */
+/* ======================= */
+
+canvas {
+  border-radius: 12px;
+  display: block;
+  margin: 0 auto;
+  background: linear-gradient(to bottom, #cde6f0, #ffffff);
+}
+
+/* ======================= */
+/* Responsive Styles */
+/* ======================= */
+
+@media (max-width: 768px) {
+  .board {
+    grid-template-columns: repeat(3, 80px);
+    gap: 8px;
+  }
+  .square {
+    width: 80px;
+    height: 80px;
+    font-size: 28px;
+  }
+  button.small {
+    padding: 8px 12px;
+  }
+  .game a {
+    width: 140px;
+  }
+  .game a img {
+    height: 100px;
+  }
+}

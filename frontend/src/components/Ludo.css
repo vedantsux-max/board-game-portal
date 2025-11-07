@@ -1,0 +1,29 @@
+.ludo-coming-soon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  margin-top: 50px;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.coming-soon-box {
+  border: 3px dashed #555;
+  padding: 50px 80px;
+  text-align: center;
+  background-color: #f5f5f5;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.coming-soon-box h2 {
+  font-size: 36px;
+  color: #ff4500;
+  margin-bottom: 20px;
+}
+
+.coming-soon-box p {
+  font-size: 18px;
+}

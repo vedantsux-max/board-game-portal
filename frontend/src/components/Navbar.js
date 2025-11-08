@@ -1,44 +1,28 @@
 // src/components/Navbar.js
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import "./Navbar.css";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './Navbar.css';
 
-export default function Navbar({ user, setUser }) {
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setUser(null); // ✅ Updates App state instantly
-    navigate("/login");
-  };
-
+export default function Navbar({ user, onLogout }) {
   return (
     <nav className="navbar">
-      <div className="nav-left">
-        <Link to="/" className="logo">
-          🎮 Board Games
-        </Link>
-      </div>
-
-      <div className="nav-right">
-        <Link to="/">Home</Link>
-        <Link to="/subscribe">Subscribe</Link>
+      <h2 className="nav-logo"> Board Game Portal</h2>
+      <ul className="nav-links">
+        <li><Link to="/">Home</Link></li>
+        <li><Link to="/subscribe">Subscribe</Link></li>
 
         {user ? (
           <>
-            <Link to="/profile">Profile</Link>
-            <button onClick={handleLogout} className="logout-btn">
-              Logout
-            </button>
+            <li><Link to="/profile">Profile</Link></li>
+            <li><button className="logout-btn" onClick={onLogout}>Logout</button></li>
           </>
         ) : (
           <>
-            <Link to="/login">Login</Link>
-            <Link to="/register">Register</Link>
+            <li><Link to="/login">Login</Link></li>
+            <li><Link to="/register">Register</Link></li>
           </>
         )}
-      </div>
+      </ul>
     </nav>
   );
 }

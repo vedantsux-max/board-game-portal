@@ -1,3 +1,4 @@
+// src/components/Login.js
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../api";
@@ -16,11 +17,10 @@ export default function Login({ setUser }) {
     e.preventDefault();
     try {
       const res = await loginUser(form);
-
       if (res.token) {
         localStorage.setItem("token", res.token);
         localStorage.setItem("user", JSON.stringify(res.user));
-        setUser(res.user);
+        setUser(res.user); // ✅ updates parent App state
         setSuccess(true);
         setMessage("✅ Login successful! Redirecting...");
         setTimeout(() => navigate("/"), 1000);

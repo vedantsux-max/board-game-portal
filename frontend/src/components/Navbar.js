@@ -9,7 +9,7 @@ export default function Navbar({ user, setUser }) {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    setUser(null);
+    setUser(null); // ✅ Updates App state instantly
     navigate("/login");
   };
 
@@ -28,7 +28,7 @@ export default function Navbar({ user, setUser }) {
         {user ? (
           <>
             <Link to="/profile">Profile</Link>
-            <button className="logout-btn" onClick={handleLogout}>
+            <button onClick={handleLogout} className="logout-btn">
               Logout
             </button>
           </>

@@ -17,7 +17,7 @@ export default function Navbar({ user, setUser }) {
     <nav className="navbar">
       <div className="nav-left">
         <h2 className="logo">
-          <Link to="/">🎮 Board Games</Link>
+          <Link to="/"> Board Game Portal </Link>
         </h2>
       </div>
 

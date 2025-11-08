@@ -1,23 +1,47 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+// src/components/Profile.js
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./Profile.css";
 
-export default function Profile({ user }) {
+export default function Profile() {
   const navigate = useNavigate();
+  const [user, setUser] = useState(null);
 
-  if (!user) {
-    return (
-      <div className="auth-container">
-        <h3>⚠️ Please log in to view your profile.</h3>
-        <button onClick={() => navigate('/login')}>Go to Login</button>
-      </div>
-    );
-  }
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser && storedUser !== "undefined") {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (err) {
+        console.error("Error parsing user from localStorage:", err);
+        navigate("/login");
+      }
+    } else {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
+  if (!user) return null;
 
   return (
-    <div className="auth-container">
-      <h2>👤 Profile</h2>
-      <p><b>Name:</b> {user.name}</p>
-      <p><b>Email:</b> {user.email}</p>
+    <div className="profile-container">
+      <div className="profile-box">
+        <h1>👤 Profile</h1>
+        <div className="profile-info">
+          <p><strong>Name:</strong> {user.name}</p>
+          <p><strong>Email:</strong> {user.email}</p>
+        </div>
+
+        <button className="logout-btn" onClick={handleLogout}>
+          Logout
+        </button>
+      </div>
     </div>
   );
 }

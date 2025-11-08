@@ -22,8 +22,8 @@ export default function Register() {
     e.preventDefault();
 
     if (form.password !== form.confirmPassword) {
-      setMessage("❌ Passwords do not match!");
       setIsSuccess(false);
+      setMessage("❌ Passwords do not match!");
       return;
     }
 
@@ -34,13 +34,15 @@ export default function Register() {
         password: form.password,
       });
 
-      if (res.success) {
+      // ✅ Normalize backend response
+      const success =
+        res.success === true ||
+        res.message?.toLowerCase().includes("registered successfully");
+
+      if (success) {
         setIsSuccess(true);
-        setMessage("✅ Registration successful! Redirecting to login...");
-        // ✅ Safe redirect with delay
-        setTimeout(() => {
-          navigate("/login");
-        }, 1500);
+        setMessage("✅ Registration successful! Redirecting to login…");
+        setTimeout(() => navigate("/login"), 1500);
       } else {
         setIsSuccess(false);
         setMessage(`❌ ${res.message || "Registration failed"}`);

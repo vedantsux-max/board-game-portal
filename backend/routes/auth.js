@@ -1,134 +1,49 @@
-// src/components/Register.js
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { registerUser } from "../api";
-import "./Register.css";
+import express from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
-export default function Register() {
-  const navigate = useNavigate();
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-  const [message, setMessage] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
+const router = express.Router();
 
-  const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+// POST /api/auth/login
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ message: 'User not found' });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
-    if (form.password !== form.confirmPassword) {
-      setIsSuccess(false);
-      setMessage("❌ Passwords do not match!");
-      return;
-    }
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    res.json({ token });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
-    try {
-      const res = await registerUser({
-        name: form.name,
-        email: form.email,
-        password: form.password,
-      });
+// POST /api/auth/register
+router.post('/register', async (req, res) => {
+  const { name, email, password } = req.body;
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) return res.status(400).json({ message: 'Email already registered' });
 
-      // ✅ Normalize backend response
-      const success =
-        res.success === true ||
-        res.message?.toLowerCase().includes("registered successfully");
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-      if (success) {
-        setIsSuccess(true);
-        setMessage("✅ Registration successful! Redirecting to login…");
-        setTimeout(() => navigate("/login"), 1500);
-      } else {
-        setIsSuccess(false);
-        setMessage(`❌ ${res.message || "Registration failed"}`);
-      }
-    } catch (error) {
-      console.error("Error during registration:", error);
-      setIsSuccess(false);
-      setMessage("❌ Server error. Please try again.");
-    }
-  };
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword
+    });
 
-  return (
-    <div className="signup-container">
-      <div className="signup-box">
-        <h1>Create Account</h1>
-        <form onSubmit={handleSubmit}>
-          <div className="input-group">
-            <label>Full Name</label>
-            <input
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              placeholder="Enter your full name"
-              required
-            />
-          </div>
+    await newUser.save();
+    res.status(201).json({ message: 'User registered successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Unable to Register' });
+  }
+});
 
-          <div className="input-group">
-            <label>Email</label>
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              placeholder="Enter your email"
-              required
-            />
-          </div>
-
-          <div className="input-group">
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-              required
-            />
-          </div>
-
-          <div className="input-group">
-            <label>Confirm Password</label>
-            <input
-              type="password"
-              name="confirmPassword"
-              value={form.confirmPassword}
-              onChange={handleChange}
-              placeholder="Confirm your password"
-              required
-            />
-          </div>
-
-          <button type="submit">Sign Up</button>
-        </form>
-
-        {message && (
-          <p
-            style={{
-              marginTop: "10px",
-              color: isSuccess ? "green" : "red",
-              fontWeight: "bold",
-            }}
-          >
-            {message}
-          </p>
-        )}
-
-        <p className="login-text">
-          Already have an account?{" "}
-          <Link className="link-button" to="/login">
-            Login
-          </Link>
-        </p>
-      </div>
-    </div>
-  );
-}
+export default router;

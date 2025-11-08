@@ -1,29 +1,38 @@
-const express = require('express');
-const router = express.Router();
-const Score = require('../models/Score');
+import express from 'express';
+import mongoose from 'mongoose';
 
-// Save score
+const router = express.Router();
+
+// Basic score schema
+const scoreSchema = new mongoose.Schema({
+  game: String,
+  name: String,
+  score: Number,
+  createdAt: { type: Date, default: Date.now },
+});
+
+const Score = mongoose.model('Score', scoreSchema);
+
+// Save a score
 router.post('/', async (req, res) => {
   try {
-    const { name, game, score } = req.body;
-    const s = new Score({ name, game, score });
-    await s.save();
-    res.status(201).json(s);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    const { game, name, score } = req.body;
+    const newScore = new Score({ game, name, score });
+    await newScore.save();
+    res.status(201).json({ success: true, score: newScore });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
   }
 });
 
-// Get top scores (optional query ?game=tictactoe)
+// Fetch all scores
 router.get('/', async (req, res) => {
   try {
-    const filter = {};
-    if (req.query.game) filter.game = req.query.game;
-    const scores = await Score.find(filter).sort({ score: -1, createdAt: 1 }).limit(50);
+    const scores = await Score.find().sort({ createdAt: -1 });
     res.json(scores);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
-module.exports = router;
+export default router;

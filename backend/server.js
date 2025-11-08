@@ -3,6 +3,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.js';
+import scoreRoutes from './routes/scores.js';
 
 dotenv.config();
 const app = express();
@@ -15,6 +16,10 @@ app.use(express.json());
 
 // ----------------- API Routes -----------------
 app.use('/api/auth', authRoutes);
+
+
+app.use('/api/scores', scoreRoutes);
+
 
 // ----------------- Subscription Route (test/demo) -----------------
 app.post('/api/subscribe', (req, res) => {

@@ -1,6 +1,20 @@
-import axios from 'axios';
+// src/api.js
+const API_BASE_URL = "https://board-game-portal.onrender.com/api";
 
-const base = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+export async function registerUser(userData) {
+  const res = await fetch(`${API_BASE_URL}/auth/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(userData),
+  });
+  return await res.json();
+}
 
-export const saveScore = (payload) => axios.post(`${base}/api/scores`, payload);
-export const fetchScores = (game) => axios.get(`${base}/api/scores${game ? '?game=' + game : ''}`);
+export async function loginUser(userData) {
+  const res = await fetch(`${API_BASE_URL}/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(userData),
+  });
+  return await res.json();
+}

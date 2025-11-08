@@ -17,11 +17,18 @@ function App() {
 
   // ✅ Keep user logged in even after refresh
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
+  try {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser && storedUser !== "undefined" && storedUser !== "null") {
       setUser(JSON.parse(storedUser));
+    } else {
+      localStorage.removeItem("user");
     }
-  }, []);
+  } catch (err) {
+    console.error("Error parsing user data from localStorage:", err);
+    localStorage.removeItem("user");
+  }
+}, []);
 
   return (
     <Router>

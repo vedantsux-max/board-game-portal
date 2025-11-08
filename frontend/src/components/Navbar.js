@@ -1,22 +1,24 @@
 // src/components/Navbar.js
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import './Navbar.css'; // Optional: for better styling
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "./Navbar.css";
 
 export default function Navbar({ user, setUser }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setUser(null);
-    navigate('/');
+    navigate("/login");
   };
 
   return (
     <nav className="navbar">
       <div className="nav-left">
-        <Link to="/" className="nav-logo">🎮 Board Games</Link>
+        <h2 className="logo">
+          <Link to="/">🎮 Board Games</Link>
+        </h2>
       </div>
 
       <div className="nav-right">
@@ -26,7 +28,9 @@ export default function Navbar({ user, setUser }) {
         {user ? (
           <>
             <Link to="/profile">Profile</Link>
-            <button className="logout-btn" onClick={handleLogout}>Logout</button>
+            <button onClick={handleLogout} className="logout-btn">
+              Logout
+            </button>
           </>
         ) : (
           <>

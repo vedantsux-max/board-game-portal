@@ -16,9 +16,9 @@ export default function Navbar({ user, setUser }) {
   return (
     <nav className="navbar">
       <div className="nav-left">
-        <h2 className="logo">
-          <Link to="/"> Board Game Portal </Link>
-        </h2>
+        <Link to="/" className="logo">
+          🎮 Board Games
+        </Link>
       </div>
 
       <div className="nav-right">
@@ -28,7 +28,7 @@ export default function Navbar({ user, setUser }) {
         {user ? (
           <>
             <Link to="/profile">Profile</Link>
-            <button onClick={handleLogout} className="logout-btn">
+            <button className="logout-btn" onClick={handleLogout}>
               Logout
             </button>
           </>

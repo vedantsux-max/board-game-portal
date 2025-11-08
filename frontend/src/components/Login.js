@@ -23,7 +23,7 @@ export default function Login({ setUser }) {
         setUser(res.user);
         setSuccess(true);
         setMessage("✅ Login successful! Redirecting...");
-        setTimeout(() => navigate("/"), 1500);
+        setTimeout(() => navigate("/"), 1000);
       } else {
         setSuccess(false);
         setMessage("❌ Invalid credentials");

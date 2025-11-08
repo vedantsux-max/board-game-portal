@@ -15,17 +15,15 @@ import Subscribe from "./components/Subscribe";
 function App() {
   const [user, setUser] = useState(null);
 
-  // ✅ Load user safely from localStorage
+  // Load user from localStorage
   useEffect(() => {
     try {
       const storedUser = localStorage.getItem("user");
-      if (storedUser && storedUser !== "undefined" && storedUser !== "null") {
+      if (storedUser && storedUser !== "undefined") {
         setUser(JSON.parse(storedUser));
-      } else {
-        localStorage.removeItem("user");
       }
     } catch (err) {
-      console.error("Error parsing user data:", err);
+      console.error("Invalid user data in localStorage");
       localStorage.removeItem("user");
     }
   }, []);

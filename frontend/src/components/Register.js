@@ -1,73 +1,111 @@
+// src/components/Register.js
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { registerUser } from "../api";
 import "./Register.css";
 
 export default function Register() {
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [message, setMessage] = useState("");
 
-  const handleSignUp = (e) => {
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
-      alert("Passwords do not match!");
+
+    if (form.password !== form.confirmPassword) {
+      setMessage("❌ Passwords do not match!");
       return;
     }
-    alert(`Signing up with\nName: ${fullName}\nEmail: ${email}`);
+
+    // Call backend API
+    const res = await registerUser({
+      name: form.name,
+      email: form.email,
+      password: form.password,
+    });
+
+    if (res.success) {
+      setMessage("✅ Registration successful! Redirecting to login...");
+      setTimeout(() => navigate("/login"), 1500);
+    } else {
+      setMessage(`❌ ${res.message || "Registration failed"}`);
+    }
   };
 
   return (
     <div className="signup-container">
       <div className="signup-box">
         <h1>Create Account</h1>
-        <form onSubmit={handleSignUp}>
+        <form onSubmit={handleSubmit}>
           <div className="input-group">
             <label>Full Name</label>
             <input
               type="text"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
+              name="name"
+              value={form.name}
+              onChange={handleChange}
               placeholder="Enter your full name"
               required
             />
           </div>
+
           <div className="input-group">
             <label>Email</label>
             <input
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              name="email"
+              value={form.email}
+              onChange={handleChange}
               placeholder="Enter your email"
               required
             />
           </div>
+
           <div className="input-group">
             <label>Password</label>
             <input
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
+              value={form.password}
+              onChange={handleChange}
               placeholder="Enter your password"
               required
             />
           </div>
+
           <div className="input-group">
             <label>Confirm Password</label>
             <input
               type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              name="confirmPassword"
+              value={form.confirmPassword}
+              onChange={handleChange}
               placeholder="Confirm your password"
               required
             />
           </div>
+
           <button type="submit">Sign Up</button>
         </form>
+
+        {message && <p style={{ marginTop: "10px" }}>{message}</p>}
+
         <p className="login-text">
-          Already have an account? <Link className="link-button" to="/login">Login</Link>
+          Already have an account?{" "}
+          <Link className="link-button" to="/login">
+            Login
+          </Link>
         </p>
       </div>
     </div>
   );
 }
+

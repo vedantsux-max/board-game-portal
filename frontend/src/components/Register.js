@@ -13,6 +13,7 @@ export default function Register() {
     confirmPassword: "",
   });
   const [message, setMessage] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -22,21 +23,32 @@ export default function Register() {
 
     if (form.password !== form.confirmPassword) {
       setMessage("❌ Passwords do not match!");
+      setIsSuccess(false);
       return;
     }
 
-    // Call backend API
-    const res = await registerUser({
-      name: form.name,
-      email: form.email,
-      password: form.password,
-    });
+    try {
+      const res = await registerUser({
+        name: form.name,
+        email: form.email,
+        password: form.password,
+      });
 
-    if (res.success) {
-      setMessage("✅ Registration successful! Redirecting to login...");
-      setTimeout(() => navigate("/login"), 1500);
-    } else {
-      setMessage(`❌ ${res.message || "Registration failed"}`);
+      if (res.success) {
+        setIsSuccess(true);
+        setMessage("✅ Registration successful! Redirecting to login...");
+        // ✅ Safe redirect with delay
+        setTimeout(() => {
+          navigate("/login");
+        }, 1500);
+      } else {
+        setIsSuccess(false);
+        setMessage(`❌ ${res.message || "Registration failed"}`);
+      }
+    } catch (error) {
+      console.error("Error during registration:", error);
+      setIsSuccess(false);
+      setMessage("❌ Server error. Please try again.");
     }
   };
 
@@ -96,7 +108,17 @@ export default function Register() {
           <button type="submit">Sign Up</button>
         </form>
 
-        {message && <p style={{ marginTop: "10px" }}>{message}</p>}
+        {message && (
+          <p
+            style={{
+              marginTop: "10px",
+              color: isSuccess ? "green" : "red",
+              fontWeight: "bold",
+            }}
+          >
+            {message}
+          </p>
+        )}
 
         <p className="login-text">
           Already have an account?{" "}
@@ -108,4 +130,3 @@ export default function Register() {
     </div>
   );
 }
-
